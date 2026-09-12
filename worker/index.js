@@ -17,7 +17,7 @@ export default {
     // Serve JSON data for a sheet
     if (path.startsWith('/api/sheet/') && request.method === 'GET') {
       const sheetName = path.replace('/api/sheet/', '');
-      const jsonUrl = 'https://raw.githubusercontent.com/Jiganyusi/PRETASE/main/worker/sheets/' + sheetName;
+      const jsonUrl = 'https://cdn.jsdelivr.net/gh/Jiganyusi/PRETASE@main/worker/sheets/' + sheetName;
       try {
         const resp = await fetch(jsonUrl, { headers: { 'User-Agent': 'Mozilla/5.0' } });
         if (!resp.ok) {
@@ -192,6 +192,7 @@ var currentPage = 1;
 var rowsPerPage = 15;
 
 window.addEventListener("load", function() {
+  loadSheetTabs();
   fetch("/api/sheet/email-cdp.json")
     .then(function(r) { return r.json(); })
     .then(function(data) {
