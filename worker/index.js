@@ -186,8 +186,8 @@ var SHEETS = [
 
 var currentSheet = null;
 var sheetData = { headers: [], rows: [], m_rekening: {} };
-var sortCol = 0;
-var sortAsc = false;
+var sortCol = 0;  // No urut column
+var sortAsc = false;  // Descending (terbaru di atas)
 var currentPage = 1;
 var rowsPerPage = 15;
 
@@ -254,6 +254,14 @@ function renderTable() {
     rows.sort(function(a, b) {
       var va = a[sortCol] || "";
       var vb = b[sortCol] || "";
+      
+      // Try numeric sort for No urut (col 0) and Nilai (col 3)
+      if (sortCol === 0 || sortCol === 3) {
+        var numA = parseFloat(String(va).replace(/[^0-9.-]/g, "")) || 0;
+        var numB = parseFloat(String(vb).replace(/[^0-9.-]/g, "")) || 0;
+        if (numA !== numB) return sortAsc ? numA - numB : numB - numA;
+      }
+      
       if (va < vb) return sortAsc ? -1 : 1;
       if (va > vb) return sortAsc ? 1 : -1;
       return 0;
