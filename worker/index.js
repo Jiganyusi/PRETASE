@@ -122,11 +122,11 @@ tr:nth-child(even) td { background: #0f172a; }
 .btn-print:hover { background: #2563eb; }
 .btn-download { background: #059669; color: #fff; }
 .btn-download:hover { background: #047857; }
-.btn-share { background: #7c3aed; color: #fff; }
+.btn-share { background: #7c3aed; color: #fff; position: relative; }
 .btn-share:hover { background: #6d28d9; }
-.share-menu { display: none; position: absolute; bottom: 100%; left: 0; right: 0; background: #1e293b; border: 1px solid #334155; border-radius: 0.5rem; padding: 0.5rem; margin-bottom: 0.5rem; }
+.share-menu { display: none; position: absolute; bottom: 100%; left: 0; right: 0; background: #1e293b; border: 1px solid #334155; border-radius: 0.5rem; padding: 0.5rem; margin-bottom: 0.5rem; z-index: 1001; box-shadow: 0 4px 12px rgba(0,0,0,0.4); }
 .share-menu.show { display: block; }
-.share-menu button { display: block; width: 100%; padding: 0.5rem; background: none; border: none; color: #e2e8f0; text-align: left; cursor: pointer; border-radius: 0.25rem; }
+.share-menu button { display: flex; align-items: center; gap: 0.5rem; width: 100%; padding: 0.6rem; background: none; border: none; color: #e2e8f0; text-align: left; cursor: pointer; border-radius: 0.25rem; font-size: 0.85rem; }
 .share-menu button:hover { background: #334155; }
 </style>
 </head>
@@ -134,7 +134,7 @@ tr:nth-child(even) td { background: #0f172a; }
 <div class="header">
   <div>
     <h1>📊 Pembayaran Region</h1>
-    <p>Data Rekap Pembayaran - Eagle High Plantations</p>
+    <p>Data Rekap Pembayaran</p>
   </div>
 </div>
 <div class="container">
@@ -372,7 +372,7 @@ function showSlip(btn) {
   var maskedRek = noRek.length >= 7 ? noRek.substring(0, 4) + "****" + noRek.slice(-3) : noRek;
   
   var html = '<div class="slip">';
-  html += '<div class="slip-header"><h2>🏦 BUKTI TRANSFER</h2><p>Eagle High Plantations</p></div>';
+  html += '<div class="slip-header"><h2>🏦 BUKTI TRANSFER</h2><p>PRETASE</p></div>';
   html += '<div class="slip-row"><span class="slip-label">Tanggal</span><span class="slip-value">' + tanggal + '</span></div>';
   html += '<div class="slip-row"><span class="slip-label">Status</span><span class="slip-value">' + status + '</span></div>';
   html += '<div class="slip-row"><span class="slip-label">Kode Transfer</span><span class="slip-value">' + kode + '</span></div>';
@@ -407,7 +407,17 @@ function downloadPDF() {
 }
 
 function toggleShare() {
-  document.getElementById("shareMenu").classList.toggle("show");
+  var menu = document.getElementById("shareMenu");
+  menu.classList.toggle("show");
+  if (menu.classList.contains("show")) {
+    // Position the menu above the share button
+    var btn = document.querySelector(".btn-share");
+    var rect = btn.getBoundingClientRect();
+    menu.style.position = "fixed";
+    menu.style.bottom = (window.innerHeight - rect.top + 5) + "px";
+    menu.style.left = rect.left + "px";
+    menu.style.right = (window.innerWidth - rect.right) + "px";
+  }
 }
 
 function shareEmail() {
@@ -425,6 +435,14 @@ function shareWhatsApp() {
 
 document.getElementById("modalOverlay").addEventListener("click", function(e) {
   if (e.target === this) closeModal();
+});
+
+document.addEventListener("click", function(e) {
+  var menu = document.getElementById("shareMenu");
+  var btn = document.querySelector(".btn-share");
+  if (menu && menu.classList.contains("show") && !menu.contains(e.target) && !btn.contains(e.target)) {
+    menu.classList.remove("show");
+  }
 });
 
 document.getElementById("searchInput").addEventListener("input", function() { currentPage = 1; renderTable(); });
