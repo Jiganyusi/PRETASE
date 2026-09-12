@@ -55,6 +55,7 @@ const HTML_PAGE = `<!DOCTYPE html>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Pembayaran Region</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <style>
 * { margin: 0; padding: 0; box-sizing: border-box; }
 body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: #0f172a; color: #e2e8f0; min-height: 100vh; }
@@ -162,7 +163,7 @@ tr:nth-child(even) td { background: #0f172a; }
     <button class="modal-close" onclick="closeModal()">×</button>
     <div id="slipContent"></div>
     <div class="modal-actions">
-      <button class="btn-download" onclick="downloadPDF()">📄 Download PDF</button>
+      <button class="btn-download" onclick="downloadImage()">📷 Download JPG</button>
       <button class="btn-share" onclick="toggleShare()">📤 Share</button>
       <div class="share-menu" id="shareMenu">
         <button onclick="shareEmail()">📧 Email</button>
@@ -184,18 +185,17 @@ var SHEETS = [
 ];
 
 var currentSheet = null;
-var sheetData = { headers: [], rows: [] };
+var sheetData = { headers: [], rows: [], m_rekening: {} };
 var sortCol = 0;
 var sortAsc = false;
 var currentPage = 1;
 var rowsPerPage = 15;
-var mRekening = [];
 
 window.addEventListener("load", function() {
   fetch("/api/sheet/email-cdp.json")
     .then(function(r) { return r.json(); })
     .then(function(data) {
-      sheetData = { headers: data.headers, rows: data.rows };
+      sheetData = { headers: data.headers, rows: data.rows, m_rekening: data.m_rekening || {} };
       currentPage = 1;
       renderTable();
     })
@@ -224,7 +224,7 @@ function loadSheet(file) {
   fetch('/api/sheet/' + file)
     .then(function(r) { return r.json(); })
     .then(function(data) {
-      sheetData = { headers: data.headers, rows: data.rows };
+      sheetData = { headers: data.headers, rows: data.rows, m_rekening: data.m_rekening || {} };
       currentPage = 1;
       renderTable();
     })
@@ -347,6 +347,12 @@ function showSlip(btn) {
   var noRek = row[6] || "-";
   var remarks = row[1] || "-";
   
+  // Get sender info from M Rekening
+  var sender = sheetData.m_rekening[kebun] || { nama: kebun, no_rek: "-", bank: "-" };
+  var senderNama = sender.nama || kebun;
+  var senderNoRek = sender.no_rek || "-";
+  var senderBank = sender.bank || "-";
+  
   // Status
   var status = "PROSES";
   var statusClass = "pending";
@@ -369,14 +375,15 @@ function showSlip(btn) {
   var grandTotal = nilai + fee;
   
   // Mask no rek pengirim
-  var maskedRek = noRek.length >= 7 ? noRek.substring(0, 4) + "****" + noRek.slice(-3) : noRek;
+  var maskedRek = senderNoRek.length >= 7 ? senderNoRek.substring(0, 4) + "****" + senderNoRek.slice(-3) : senderNoRek;
   
   var html = '<div class="slip">';
   html += '<div class="slip-header"><h2>🏦 BUKTI TRANSFER</h2><p>PRETASE</p></div>';
   html += '<div class="slip-row"><span class="slip-label">Tanggal</span><span class="slip-value">' + tanggal + '</span></div>';
   html += '<div class="slip-row"><span class="slip-label">Status</span><span class="slip-value">' + status + '</span></div>';
   html += '<div class="slip-row"><span class="slip-label">Kode Transfer</span><span class="slip-value">' + kode + '</span></div>';
-  html += '<div class="slip-row"><span class="slip-label">Pengirim</span><span class="slip-value">' + kebun + '</span></div>';
+  html += '<div class="slip-row"><span class="slip-label">Pengirim</span><span class="slip-value">' + senderNama + '</span></div>';
+  html += '<div class="slip-row"><span class="slip-label">Bank Pengirim</span><span class="slip-value">' + senderBank + '</span></div>';
   html += '<div class="slip-row"><span class="slip-label">No. Rekening</span><span class="slip-value masked">' + maskedRek + '</span></div>';
   html += '<div class="slip-row"><span class="slip-label">Penerima</span><span class="slip-value">' + bank + '<br>' + namaRek + '<br>' + noRek + '</span></div>';
   html += '<div class="slip-total">';
@@ -398,19 +405,26 @@ function closeModal() {
   document.getElementById("shareMenu").classList.remove("show");
 }
 
-function downloadPDF() {
-  var slip = document.getElementById("slipContent");
-  var win = window.open("", "_blank");
-  win.document.write("<html><head><title>Slip Transfer</title><style>body{font-family:Arial,sans-serif;padding:20px}table{width:100%;border-collapse:collapse}td{padding:8px;border-bottom:1px solid #ddd}</style></head><body>" + slip.innerHTML + "</body></html>");
-  win.document.close();
-  win.print();
+function downloadImage() {
+  var slip = document.querySelector("#slipContent .slip");
+  if (!slip) return;
+  
+  html2canvas(slip, {
+    backgroundColor: '#1e293b',
+    scale: 2,
+    useCORS: true
+  }).then(function(canvas) {
+    var link = document.createElement("a");
+    link.download = "slip-transfer-" + new Date().toISOString().slice(0, 10) + ".jpg";
+    link.href = canvas.toDataURL("image/jpeg", 0.9);
+    link.click();
+  });
 }
 
 function toggleShare() {
   var menu = document.getElementById("shareMenu");
   menu.classList.toggle("show");
   if (menu.classList.contains("show")) {
-    // Position the menu above the share button
     var btn = document.querySelector(".btn-share");
     var rect = btn.getBoundingClientRect();
     menu.style.position = "fixed";
@@ -421,16 +435,31 @@ function toggleShare() {
 }
 
 function shareEmail() {
-  var slip = document.getElementById("slipContent");
-  var text = slip.innerText;
-  var subject = "Slip Transfer - PRETASE";
-  window.open("mailto:?subject=" + encodeURIComponent(subject) + "&body=" + encodeURIComponent(text));
+  var slip = document.querySelector("#slipContent .slip");
+  if (!slip) return;
+  
+  html2canvas(slip, { backgroundColor: '#1e293b', scale: 2 }).then(function(canvas) {
+    var dataUrl = canvas.toDataURL("image/jpeg", 0.9);
+    var subject = "Slip Transfer - PRETASE";
+    var body = "Slip transfer terlampir dalam gambar.\\n\\nSlip ini dibuat melalui website PRETASE, cek kebenarannya dengan rekening koran anda.";
+    window.open("mailto:?subject=" + encodeURIComponent(subject) + "&body=" + encodeURIComponent(body));
+  });
 }
 
 function shareWhatsApp() {
-  var slip = document.getElementById("slipContent");
-  var text = slip.innerText;
-  window.open("https://wa.me/?text=" + encodeURIComponent(text));
+  var slip = document.querySelector("#slipContent .slip");
+  if (!slip) return;
+  
+  html2canvas(slip, { backgroundColor: '#1e293b', scale: 2 }).then(function(canvas) {
+    var dataUrl = canvas.toDataURL("image/jpeg", 0.9);
+    // Download image first, then share via WhatsApp Web
+    var link = document.createElement("a");
+    link.href = dataUrl;
+    link.download = "slip-transfer.jpg";
+    link.click();
+    // Open WhatsApp Web
+    window.open("https://web.whatsapp.com/send?text=Slip%20transfer%20-%20PRETASE");
+  });
 }
 
 document.getElementById("modalOverlay").addEventListener("click", function(e) {

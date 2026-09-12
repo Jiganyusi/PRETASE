@@ -30,11 +30,19 @@ def get_value(cell_value):
 
 
 def build_m_rekening_lookup(sheet):
-    """Build lookup dict from M Rekening sheet."""
+    """Build lookup dict from M Rekening sheet.
+    
+    Sheet structure:
+    col0: Code (sometimes empty)
+    col1: Number
+    col2: Code (BJMO, BLNE, etc.)
+    col3: No Rekening
+    col4: Nama
+    col5: Bank
+    """
     lookup = {}
     rows = list(sheet.iter_rows(values_only=True))
     
-    # No header row - start from row 1
     for i in range(1, len(rows)):
         row = rows[i]
         if len(row) < 6:
@@ -45,7 +53,7 @@ def build_m_rekening_lookup(sheet):
         nama = str(row[4] or "").strip() if row[4] else ""
         bank = str(row[5] or "").strip() if row[5] else ""
         
-        if not no_rek or no_rek.startswith("="):
+        if not code or not no_rek:
             continue
         
         lookup[code] = {
