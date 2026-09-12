@@ -11,6 +11,198 @@
     "Jenis Trx",
     "Lunas"
   ],
+  "m_rekening": {
+    "BJMO": {
+      "nama": "JAYA MANDIRI SUKSES",
+      "no_rek": "0310004527001",
+      "bank": "MANDIRI"
+    },
+    "BLNE": {
+      "nama": "JAYA MANDIRI SUKSES BERLIAN ESTATE",
+      "no_rek": "012601001334309",
+      "bank": "BRI"
+    },
+    "PLME": {
+      "nama": "JAYA MANDIRI SUKSES PUALAM ESTATE",
+      "no_rek": "012601001340300",
+      "bank": "BRI"
+    },
+    "BBNM": {
+      "nama": "SURYABUMI TUNGGAL PERKASA BATU BULAN MILL",
+      "no_rek": "012601001349304",
+      "bank": "BRI"
+    },
+    "ITNE": {
+      "nama": "SURYABUMI TUNGGAL PERKASA INTAN ESTATE",
+      "no_rek": "012601001339309",
+      "bank": "BRI"
+    },
+    "MDLE": {
+      "nama": "SURYABUMI TUNGGAL PERKASA MERAH DELIMA ESTATE",
+      "no_rek": "012601001337307",
+      "bank": "BRI"
+    },
+    "SFRM": {
+      "nama": "PESONALINTAS SURASEJATI, PT",
+      "no_rek": "2703002120",
+      "bank": "Maybank"
+    },
+    "SFRE": {
+      "nama": "PESONALINTAS SURASEJATI SAFIRE ESTATE",
+      "no_rek": "012601001335305",
+      "bank": "BRI"
+    },
+    "BBNB": {
+      "nama": "SINGALAND ASETAMA BATU BULAN BULKING",
+      "no_rek": "012601001350305",
+      "bank": "BRI"
+    },
+    "BBNE": {
+      "nama": "SINGALAND ASETAMA BATU BULAN ESTATE",
+      "no_rek": "012601001352307",
+      "bank": "BRI"
+    },
+    "EMRE": {
+      "nama": "SINGALAND ASETAMA EMERALD ESTATE",
+      "no_rek": "012601001353303",
+      "bank": "BRI"
+    },
+    "TPZE": {
+      "nama": "SINGALAND ASETAMA TOPAZ ESTATE",
+      "no_rek": "012601001348308",
+      "bank": "BRI"
+    },
+    "PMTE": {
+      "nama": "MANUNGGAL ADIJAYA PERMATA ESTATE",
+      "no_rek": "012601001342302",
+      "bank": "BRI"
+    },
+    "MTRE": {
+      "nama": "SAKA KENCANA SEJAHTERA MUTIARA ESTATE",
+      "no_rek": "012601001338303",
+      "bank": "BRI"
+    },
+    "KMYE": {
+      "nama": "KARYAPRATAMA AGRISEJAHTERA KALIMAYA ESTATE",
+      "no_rek": "012601001354309",
+      "bank": "BRI"
+    },
+    "": {
+      "nama": "GIADE PUTRA BUANA",
+      "no_rek": "1130014907517",
+      "bank": "MANDIRI"
+    },
+    "RICHARD S. SIREGAR": {
+      "nama": "RICHARD SAMUEL SIREGAR",
+      "no_rek": "353001025230539",
+      "bank": "BRI"
+    },
+    "KT SS": {
+      "nama": "MISRIANI",
+      "no_rek": "723001019406536",
+      "bank": "BRI"
+    },
+    "KT MUT": {
+      "nama": "Kelompok Tani Mitra Usaha Tani",
+      "no_rek": "735701017389536",
+      "bank": "BRI"
+    },
+    "KT BUT": {
+      "nama": "Kelompok Tani Berkat Usaha Tani",
+      "no_rek": "450301026417532",
+      "bank": "BRI"
+    },
+    "KT BT": {
+      "nama": "EDI AFIFURROHMAN",
+      "no_rek": "012601001565560",
+      "bank": "BRI"
+    },
+    "KT SM": {
+      "nama": "SARIMULYA MAKMUR",
+      "no_rek": "789501005855537",
+      "bank": "BRI"
+    },
+    "KT MJ": {
+      "nama": "Mekar Jaya",
+      "no_rek": "723001019458533",
+      "bank": "BRI"
+    },
+    "KT SCM": {
+      "nama": "SINAR CAHAYA MULIA",
+      "no_rek": "012601000478304",
+      "bank": "BRI"
+    },
+    "RSHN": {
+      "nama": "RODO SIAHAAN",
+      "no_rek": "770801005656532",
+      "bank": "BRI"
+    },
+    "TJSP": {
+      "nama": "JOKO SUWARNO",
+      "no_rek": "768701004005536",
+      "bank": "BRI"
+    },
+    "Rek Lama": {
+      "nama": "Sarbini",
+      "no_rek": "349701029003534",
+      "bank": "BRI"
+    },
+    "Rek Baru": {
+      "nama": "Sarbini",
+      "no_rek": "349701004163503",
+      "bank": "BRI"
+    },
+    "RO": {
+      "nama": "PT. MUGI",
+      "no_rek": "00702577659",
+      "bank": "Permata"
+    },
+    "Kebun": {
+      "nama": "MUGI PT",
+      "no_rek": "3601168564",
+      "bank": "Danamaon"
+    },
+    "Lingga Motor": {
+      "nama": "TULUS YULIONO",
+      "no_rek": "0225134008",
+      "bank": "BNI"
+    },
+    "Kanitpam PMTE": {
+      "nama": "Nur Laelah",
+      "no_rek": "723001010277532",
+      "bank": "BRI"
+    },
+    "Tutup Rekening": {
+      "nama": "(Closed)PT Mega Engineering Service",
+      "no_rek": "008046575278",
+      "bank": "HSBC"
+    },
+    "Sehat Subur": {
+      "nama": "Nilawati Johansyah SH",
+      "no_rek": "0310006769007",
+      "bank": "MANDIRI"
+    },
+    "Ahli waris Saripudin": {
+      "nama": "WIWIN",
+      "no_rek": "012601051579501",
+      "bank": "BRI"
+    },
+    "Lama": {
+      "nama": "KOPERASI JASA AL SEMBILAN EMPAT JAYA",
+      "no_rek": "012601015039535",
+      "bank": "BRI"
+    },
+    "Baru": {
+      "nama": "KOPERASI JASA AL SEMBILAN EMPAT JAYA",
+      "no_rek": "012601002110562",
+      "bank": "BRI"
+    },
+    "ACC RO": {
+      "nama": "TAJUDIN NOOR",
+      "no_rek": "0310006300464",
+      "bank": "BRI"
+    }
+  },
   "rows": [
     [
       "1",

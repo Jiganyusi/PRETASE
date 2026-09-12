@@ -98,23 +98,36 @@ tr:nth-child(even) td { background: #0f172a; }
 .modal-overlay.active { display: flex; }
 .modal { background: #1e293b; border: 1px solid #334155; border-radius: 0.75rem; padding: 2rem; max-width: 500px; width: 90%; max-height: 90vh; overflow-y: auto; position: relative; }
 .modal-close { position: absolute; top: 1rem; right: 1rem; background: none; border: none; color: #94a3b8; font-size: 1.5rem; cursor: pointer; }
+.modal-close:hover { color: #e2e8f0; }
 .slip { background: linear-gradient(135deg, #1e3a8a 0%, #1e293b 100%); border: 1px solid #3b82f6; border-radius: 0.75rem; padding: 1.5rem; margin-bottom: 1rem; }
 .slip-header { text-align: center; margin-bottom: 1rem; border-bottom: 1px solid #334155; padding-bottom: 1rem; }
 .slip-header h2 { color: #fbbf24; font-size: 1.2rem; margin-bottom: 0.3rem; }
 .slip-header p { color: #94a3b8; font-size: 0.85rem; }
 .slip-row { display: flex; justify-content: space-between; padding: 0.5rem 0; border-bottom: 1px solid #334155; }
+.slip-row:last-child { border-bottom: none; }
 .slip-label { color: #94a3b8; font-size: 0.85rem; }
-.slip-value { color: #e2e8f0; font-weight: 600; font-size: 0.85rem; text-align: right; }
+.slip-value { color: #e2e8f0; font-weight: 600; font-size: 0.85rem; text-align: right; max-width: 60%; word-break: break-word; }
 .slip-value.masked { font-family: monospace; letter-spacing: 2px; }
 .slip-total { background: #0f172a; border: 1px solid #3b82f6; border-radius: 0.5rem; padding: 1rem; margin-top: 1rem; }
+.slip-total .slip-row { border-bottom: 1px solid #1e293b; }
 .slip-total .slip-label { color: #fbbf24; font-weight: 600; }
 .slip-total .slip-value { color: #fbbf24; font-size: 1rem; }
 .slip-status { text-align: center; padding: 0.5rem; border-radius: 0.5rem; margin-top: 1rem; font-weight: 600; }
 .slip-status.success { background: #065f46; color: #34d399; }
 .slip-status.pending { background: #78350f; color: #fbbf24; }
+.slip-footer { text-align: center; font-size: 0.75rem; color: #64748b; margin-top: 1rem; padding-top: 1rem; border-top: 1px solid #334155; }
 .modal-actions { display: flex; gap: 0.5rem; margin-top: 1rem; }
-.modal-actions button { flex: 1; padding: 0.6rem; border: none; border-radius: 0.5rem; cursor: pointer; font-size: 0.85rem; font-weight: 600; }
+.modal-actions button { flex: 1; padding: 0.6rem; border: none; border-radius: 0.5rem; cursor: pointer; font-size: 0.85rem; font-weight: 600; transition: all 0.2s; }
 .btn-print { background: #3b82f6; color: #fff; }
+.btn-print:hover { background: #2563eb; }
+.btn-download { background: #059669; color: #fff; }
+.btn-download:hover { background: #047857; }
+.btn-share { background: #7c3aed; color: #fff; }
+.btn-share:hover { background: #6d28d9; }
+.share-menu { display: none; position: absolute; bottom: 100%; left: 0; right: 0; background: #1e293b; border: 1px solid #334155; border-radius: 0.5rem; padding: 0.5rem; margin-bottom: 0.5rem; }
+.share-menu.show { display: block; }
+.share-menu button { display: block; width: 100%; padding: 0.5rem; background: none; border: none; color: #e2e8f0; text-align: left; cursor: pointer; border-radius: 0.25rem; }
+.share-menu button:hover { background: #334155; }
 </style>
 </head>
 <body>
@@ -149,7 +162,12 @@ tr:nth-child(even) td { background: #0f172a; }
     <button class="modal-close" onclick="closeModal()">×</button>
     <div id="slipContent"></div>
     <div class="modal-actions">
-      <button class="btn-print" onclick="printSlip()">🖨 Print</button>
+      <button class="btn-download" onclick="downloadPDF()">📄 Download PDF</button>
+      <button class="btn-share" onclick="toggleShare()">📤 Share</button>
+      <div class="share-menu" id="shareMenu">
+        <button onclick="shareEmail()">📧 Email</button>
+        <button onclick="shareWhatsApp()">💬 WhatsApp</button>
+      </div>
     </div>
   </div>
 </div>
@@ -171,9 +189,19 @@ var sortCol = 0;
 var sortAsc = false;
 var currentPage = 1;
 var rowsPerPage = 15;
+var mRekening = [];
 
 window.addEventListener("load", function() {
-  loadSheetTabs();
+  fetch("/api/sheet/email-cdp.json")
+    .then(function(r) { return r.json(); })
+    .then(function(data) {
+      sheetData = { headers: data.headers, rows: data.rows };
+      currentPage = 1;
+      renderTable();
+    })
+    .catch(function(e) {
+      document.getElementById("content").innerHTML = '<div class="loading">Error: ' + e.message + '</div>';
+    });
 });
 
 function loadSheetTabs() {
@@ -186,9 +214,6 @@ function loadSheetTabs() {
     btn.onclick = function() { loadSheet(s.file); };
     tabs.appendChild(btn);
   });
-  if (!currentSheet && SHEETS.length > 0) {
-    loadSheet(SHEETS[0].file);
-  }
 }
 
 function loadSheet(file) {
@@ -309,25 +334,59 @@ function goToPage(page) {
 
 function showSlip(btn) {
   var tr = btn.closest('tr');
-  var row = Array.from(tr.children).map(function(td) { return td.textContent; });
+  var row = Array.from(tr.children).map(function(td) { return td.textContent.replace(/[^a-zA-Z0-9\\s\\-\\./]/g, '').trim(); });
   
-  var nilai = Number(row[3].replace(/[^0-9]/g, "")) || 0;
+  // JSON columns: 0=No urut, 1=Ket, 2=Kebun, 3=Nilai, 4=Nama Rek, 5=Bank, 6=No rek, 7=Jenis Trx, 8=Lunas
+  
+  var tanggal = row[8] || "-";
   var kode = row[7] || "-";
-  var isLunas = row[8] && row[8] !== "";
+  var kebun = row[2] || "";
+  var nilai = Number(row[3].replace(/[^0-9]/g, "")) || 0;
+  var namaRek = row[4] || "-";
+  var bank = row[5] || "-";
+  var noRek = row[6] || "-";
+  var remarks = row[1] || "-";
+  
+  // Status
+  var status = "PROSES";
+  var statusClass = "pending";
+  if (tanggal && tanggal !== "-" && tanggal !== "0") {
+    if (/^\\d{2}-\\d{2}-\\d{4}$/.test(tanggal)) {
+      status = "SUKSES";
+      statusClass = "success";
+    } else {
+      status = tanggal;
+    }
+  }
+  
+  // Fee
+  var fee = 0;
+  var kodeUpper = kode.toUpperCase();
+  if (kodeUpper.indexOf("IFT") === 0) fee = 0;
+  else if (kodeUpper.indexOf("BIF") === 0) fee = 2500;
+  else if (kodeUpper.indexOf("KLR") === 0) fee = 2900;
+  
+  var grandTotal = nilai + fee;
+  
+  // Mask no rek pengirim
+  var maskedRek = noRek.length >= 7 ? noRek.substring(0, 4) + "****" + noRek.slice(-3) : noRek;
   
   var html = '<div class="slip">';
   html += '<div class="slip-header"><h2>🏦 BUKTI TRANSFER</h2><p>Eagle High Plantations</p></div>';
+  html += '<div class="slip-row"><span class="slip-label">Tanggal</span><span class="slip-value">' + tanggal + '</span></div>';
+  html += '<div class="slip-row"><span class="slip-label">Status</span><span class="slip-value">' + status + '</span></div>';
   html += '<div class="slip-row"><span class="slip-label">Kode Transfer</span><span class="slip-value">' + kode + '</span></div>';
-  html += '<div class="slip-row"><span class="slip-label">Tanggal</span><span class="slip-value">' + (row[8] || "-") + '</span></div>';
-  html += '<div class="slip-row"><span class="slip-label">Kebun</span><span class="slip-value">' + (row[2] || "-") + '</span></div>';
-  html += '<div class="slip-row"><span class="slip-label">Keterangan</span><span class="slip-value">' + (row[1] || "-") + '</span></div>';
-  html += '<div class="slip-row"><span class="slip-label">Penerima</span><span class="slip-value">' + (row[4] || "-") + '</span></div>';
-  html += '<div class="slip-row"><span class="slip-label">Bank</span><span class="slip-value">' + (row[5] || "-") + '</span></div>';
-  html += '<div class="slip-row"><span class="slip-label">No. Rekening</span><span class="slip-value">' + (row[6] || "-") + '</span></div>';
+  html += '<div class="slip-row"><span class="slip-label">Pengirim</span><span class="slip-value">' + kebun + '</span></div>';
+  html += '<div class="slip-row"><span class="slip-label">No. Rekening</span><span class="slip-value masked">' + maskedRek + '</span></div>';
+  html += '<div class="slip-row"><span class="slip-label">Penerima</span><span class="slip-value">' + bank + '<br>' + namaRek + '<br>' + noRek + '</span></div>';
   html += '<div class="slip-total">';
-  html += '<div class="slip-row"><span class="slip-label">Nilai Transfer</span><span class="slip-value">Rp ' + nilai.toLocaleString('id-ID') + '</span></div>';
+  html += '<div class="slip-row"><span class="slip-label">Jumlah</span><span class="slip-value">Rp ' + nilai.toLocaleString('id-ID') + '</span></div>';
+  html += '<div class="slip-row"><span class="slip-label">Fee Transfer</span><span class="slip-value">Rp ' + fee.toLocaleString('id-ID') + '</span></div>';
+  html += '<div class="slip-row"><span class="slip-label">Grand Total</span><span class="slip-value">Rp ' + grandTotal.toLocaleString('id-ID') + '</span></div>';
   html += '</div>';
-  html += '<div class="slip-status ' + (isLunas ? 'success' : 'pending') + '">' + (isLunas ? '✓ TRANSAKSI BERHASIL' : '⏳ BELUM DIBAYAR/PROSES') + '</div>';
+  html += '<div class="slip-row"><span class="slip-label">Remarks</span><span class="slip-value">' + remarks + '</span></div>';
+  html += '<div class="slip-status ' + statusClass + '">' + status + '</div>';
+  html += '<div class="slip-footer">Slip ini dibuat melalui website PRETASE, cek kebenarannya dengan rekening koran anda.</div>';
   html += '</div>';
   
   document.getElementById("slipContent").innerHTML = html;
@@ -336,14 +395,32 @@ function showSlip(btn) {
 
 function closeModal() {
   document.getElementById("modalOverlay").classList.remove("active");
+  document.getElementById("shareMenu").classList.remove("show");
 }
 
-function printSlip() {
+function downloadPDF() {
   var slip = document.getElementById("slipContent");
   var win = window.open("", "_blank");
   win.document.write("<html><head><title>Slip Transfer</title><style>body{font-family:Arial,sans-serif;padding:20px}table{width:100%;border-collapse:collapse}td{padding:8px;border-bottom:1px solid #ddd}</style></head><body>" + slip.innerHTML + "</body></html>");
   win.document.close();
   win.print();
+}
+
+function toggleShare() {
+  document.getElementById("shareMenu").classList.toggle("show");
+}
+
+function shareEmail() {
+  var slip = document.getElementById("slipContent");
+  var text = slip.innerText;
+  var subject = "Slip Transfer - PRETASE";
+  window.open("mailto:?subject=" + encodeURIComponent(subject) + "&body=" + encodeURIComponent(text));
+}
+
+function shareWhatsApp() {
+  var slip = document.getElementById("slipContent");
+  var text = slip.innerText;
+  window.open("https://wa.me/?text=" + encodeURIComponent(text));
 }
 
 document.getElementById("modalOverlay").addEventListener("click", function(e) {

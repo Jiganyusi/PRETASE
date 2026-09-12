@@ -48,64 +48,13 @@ def build_m_rekening_lookup(sheet):
         if not no_rek or no_rek.startswith("="):
             continue
         
-        lookup[no_rek] = {
-            "code": code,
+        lookup[code] = {
             "nama": nama,
+            "no_rek": no_rek,
             "bank": bank
         }
     
     return lookup
-
-
-def resolve_vlookup(formula, row_data, m_rek_lookup):
-    """Resolve VLOOKUP formula manually."""
-    if not isinstance(formula, str) or "VLOOKUP" not in formula.upper():
-        return formula
-    
-    # Parse VLOOKUP(lookup_value, table_array, col_index_num, [range_lookup])
-    # Example: =VLOOKUP($I5,'M Rekening'!$D:$F,2,0)
-    
-    # Extract col_index_num
-    match = re.search(r'VLOOKUP\([^,]+,\s*[^,]+,\s*(\d+)', formula, re.IGNORECASE)
-    if not match:
-        return formula
-    
-    col_index = int(match.group(1))  # 2 or 3
-    
-    # lookup_value is typically $I5 (col I = index 8 in 0-based)
-    # We need to get the No rek from row_data[6] (which is from Excel col I)
-    no_rek = row_data[6] if len(row_data) > 6 else ""
-    
-    if not no_rek:
-        return formula
-    
-    # Lookup in M Rekening
-    rek_info = m_rek_lookup.get(str(no_rek).strip())
-    if not rek_info:
-        return formula
-    
-    if col_index == 2:
-        return rek_info["nama"]
-    elif col_index == 3:
-        return rek_info["bank"]
-    
-    return formula
-
-
-def resolve_jenis_trx(formula):
-    """Resolve Jenis Trx formula to get transfer type."""
-    if not isinstance(formula, str):
-        return formula
-    
-    formula_upper = formula.upper()
-    if "IFT" in formula_upper:
-        return "BRI ke BRI"
-    elif "KLR" in formula_upper or "BIF" in formula_upper:
-        return "BRI ke Bank Lain"
-    elif "MASS" in formula_upper:
-        return "Mass Transfer"
-    
-    return formula
 
 
 def parse_sheet(sheet, m_rek_lookup):
@@ -190,16 +139,6 @@ def parse_sheet(sheet, m_rek_lookup):
             else:
                 row_data.append("")
         
-        # Resolve VLOOKUP for Nama Rek (index 4 in row_data) and Bank (index 5)
-        if "VLOOKUP" in str(row_data[4]).upper():
-            row_data[4] = resolve_vlookup(row_data[4], row_data, m_rek_lookup)
-        if "VLOOKUP" in str(row_data[5]).upper():
-            row_data[5] = resolve_vlookup(row_data[5], row_data, m_rek_lookup)
-        
-        # Resolve Jenis Trx formula
-        if "IF" in str(row_data[7]).upper() and "LEFT" in str(row_data[7]).upper():
-            row_data[7] = resolve_jenis_trx(row_data[7])
-        
         # Use current_date if Lunas col is empty
         if not row_data[8] and current_date:
             row_data[8] = current_date
@@ -263,6 +202,7 @@ def main():
         output = {
             "sheet": actual_name,
             "headers": headers,
+            "m_rekening": m_rek_lookup,
             "rows": rows,
             "total": len(rows)
         }
