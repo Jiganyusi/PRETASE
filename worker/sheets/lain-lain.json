@@ -127,7 +127,7 @@
       "TBSCPOPK Des 25 Thp 5 Setyo Budi",
       "MTRE",
       "21820800",
-      "SETYO BUDI",
+      "\nSETYO BUDI",
       "BRI",
       "789501006597530",
       "A202613-M009NF6WY",
@@ -179,17 +179,6 @@
     ],
     [
       "16",
-      "PB dana SFRM ke PMTE",
-      "",
-      "51400000",
-      "=VLOOKUP($I102,'M Rekening'!$D:$F,2,0)",
-      "=VLOOKUP($I102,'M Rekening'!$D:$F,3,0)",
-      "=VLOOKUP(RIGHT($D102,4),'M Rekening'!$C$2:$D$17,2,0)",
-      "IFT18334639",
-      ""
-    ],
-    [
-      "17",
       "Dana Pengawalan Batu Januari 2026",
       "BBNE",
       "35000000",
@@ -200,7 +189,7 @@
       "24-02-2026"
     ],
     [
-      "18",
+      "17",
       "Dana Pengawalan Batu Januari 2026",
       "ITNE",
       "30000000",
@@ -211,7 +200,7 @@
       "26-02-2026"
     ],
     [
-      "19",
+      "18",
       "Dana Pengawalan Batu Januari 2026",
       "SFRE",
       "30000000",
@@ -222,7 +211,7 @@
       "26-02-2026"
     ],
     [
-      "20",
+      "19",
       "LPJ konsumsi mess anak magang (25 org)",
       "SFRM",
       "1400000",
@@ -233,7 +222,7 @@
       ""
     ],
     [
-      "21",
+      "20",
       "Dana Pengawalan Batu Februari 2026",
       "BBNE",
       "35000000",
@@ -244,7 +233,7 @@
       "13-03-2026"
     ],
     [
-      "22",
+      "21",
       "Dana Pengawalan Batu Februari 2026",
       "ITNE",
       "30000000",
@@ -255,7 +244,7 @@
       ""
     ],
     [
-      "23",
+      "22",
       "Dana Pengawalan Batu Februari 2026",
       "SFRE",
       "30000000",
@@ -266,7 +255,7 @@
       ""
     ],
     [
-      "24",
+      "23",
       "Pemb batu PMTE-MTRE Thp 1 - 2026",
       "PMTE",
       "12500000",
@@ -277,18 +266,7 @@
       ""
     ],
     [
-      "25",
-      "PB dana SFRM ke PMTE",
-      "",
-      "12500000",
-      "=VLOOKUP($I263,'M Rekening'!$D:$F,2,0)",
-      "=VLOOKUP($I263,'M Rekening'!$D:$F,3,0)",
-      "=VLOOKUP(RIGHT($D263,4),'M Rekening'!$C$2:$D$17,2,0)",
-      "IFT21047743",
-      ""
-    ],
-    [
-      "26",
+      "24",
       "Pemb batu PMTE-MTRE Thp 2 - 2026",
       "PMTE",
       "12500000",
@@ -299,18 +277,7 @@
       ""
     ],
     [
-      "27",
-      "PB dana SFRM ke PMTE",
-      "",
-      "12500000",
-      "=VLOOKUP($I284,'M Rekening'!$D:$F,2,0)",
-      "=VLOOKUP($I284,'M Rekening'!$D:$F,3,0)",
-      "=VLOOKUP(RIGHT($D284,4),'M Rekening'!$C$2:$D$17,2,0)",
-      "IFT21047744",
-      ""
-    ],
-    [
-      "28",
+      "25",
       "Pemb batu PMTE-MTRE Thp 3 - 2026",
       "PMTE",
       "12500000",
@@ -321,18 +288,7 @@
       ""
     ],
     [
-      "29",
-      "PB dana SFRM ke PMTE",
-      "",
-      "12500000",
-      "=VLOOKUP($I305,'M Rekening'!$D:$F,2,0)",
-      "=VLOOKUP($I305,'M Rekening'!$D:$F,3,0)",
-      "=VLOOKUP(RIGHT($D305,4),'M Rekening'!$C$2:$D$17,2,0)",
-      "IFT21047745",
-      ""
-    ],
-    [
-      "30",
+      "26",
       "Pemb batu PMTE-MTRE Thp 4 - 2026",
       "PMTE",
       "12500000",
@@ -343,18 +299,7 @@
       ""
     ],
     [
-      "31",
-      "PB dana SFRM ke PMTE",
-      "",
-      "12500000",
-      "=VLOOKUP($I326,'M Rekening'!$D:$F,2,0)",
-      "=VLOOKUP($I326,'M Rekening'!$D:$F,3,0)",
-      "=VLOOKUP(RIGHT($D326,4),'M Rekening'!$C$2:$D$17,2,0)",
-      "IFT21045155",
-      ""
-    ],
-    [
-      "32",
+      "27",
       "Pemb batu PMTE-MTRE Thp 5 - 2026",
       "PMTE",
       "12500000",
@@ -365,18 +310,7 @@
       ""
     ],
     [
-      "33",
-      "PB dana SFRM ke PMTE",
-      "",
-      "12500000",
-      "=VLOOKUP($I347,'M Rekening'!$D:$F,2,0)",
-      "=VLOOKUP($I347,'M Rekening'!$D:$F,3,0)",
-      "=VLOOKUP(RIGHT($D347,4),'M Rekening'!$C$2:$D$17,2,0)",
-      "IFT21047746",
-      ""
-    ],
-    [
-      "34",
+      "28",
       "Pemb batu PMTE-MTRE Thp 6 - 2026",
       "PMTE",
       "12500000",
@@ -387,18 +321,7 @@
       ""
     ],
     [
-      "35",
-      "PB dana SFRM ke PMTE",
-      "",
-      "12500000",
-      "=VLOOKUP($I368,'M Rekening'!$D:$F,2,0)",
-      "=VLOOKUP($I368,'M Rekening'!$D:$F,3,0)",
-      "=VLOOKUP(RIGHT($D368,4),'M Rekening'!$C$2:$D$17,2,0)",
-      "IFT21047747",
-      ""
-    ],
-    [
-      "36",
+      "29",
       "Pemb batu PMTE-MTRE Thp 7 - 2026",
       "PMTE",
       "12500000",
@@ -409,18 +332,7 @@
       ""
     ],
     [
-      "37",
-      "PB dana SFRM ke PMTE",
-      "",
-      "12500000",
-      "=VLOOKUP($I389,'M Rekening'!$D:$F,2,0)",
-      "=VLOOKUP($I389,'M Rekening'!$D:$F,3,0)",
-      "=VLOOKUP(RIGHT($D389,4),'M Rekening'!$C$2:$D$17,2,0)",
-      "IFT21047748",
-      ""
-    ],
-    [
-      "38",
+      "30",
       "Pemb batu PMTE-MTRE Thp 8 - 2026",
       "PMTE",
       "11500000",
@@ -431,18 +343,7 @@
       ""
     ],
     [
-      "39",
-      "PB dana SFRM ke PMTE",
-      "",
-      "11500000",
-      "=VLOOKUP($I410,'M Rekening'!$D:$F,2,0)",
-      "=VLOOKUP($I410,'M Rekening'!$D:$F,3,0)",
-      "=VLOOKUP(RIGHT($D410,4),'M Rekening'!$C$2:$D$17,2,0)",
-      "IFT21047751",
-      ""
-    ],
-    [
-      "40",
+      "31",
       "byr PDAM kantor mar 2026",
       "SFRM",
       "1392000",
@@ -453,7 +354,7 @@
       "26-03-2026"
     ],
     [
-      "41",
+      "32",
       "Gaji susulan kary SFRE",
       "SFRE",
       "2006285",
@@ -464,7 +365,7 @@
       "27-03-2026"
     ],
     [
-      "42",
+      "33",
       "Dana Pengawalan Batu Maret 2026",
       "BBNE",
       "35000000",
@@ -475,7 +376,7 @@
       "22-04-2026"
     ],
     [
-      "43",
+      "34",
       "Dana Pengawalan Batu Maret 2026",
       "ITNE",
       "30000000",
@@ -486,7 +387,7 @@
       "15-04-2026"
     ],
     [
-      "44",
+      "35",
       "Dana Pengawalan Batu Maret 2026",
       "SFRE",
       "30000000",
@@ -497,7 +398,7 @@
       "15-04-2026"
     ],
     [
-      "45",
+      "36",
       "Potongan BPJS kary PLME",
       "PLME",
       "149660",
@@ -508,7 +409,7 @@
       "16-04-2026"
     ],
     [
-      "46",
+      "37",
       "Klaim pengobatan staff bjmo Feb 26",
       "SFRM",
       "4450633",
@@ -519,7 +420,7 @@
       "21-04-2026"
     ],
     [
-      "47",
+      "38",
       "Dana Pengawalan Batu April 2026",
       "BBNE",
       "35000000",
@@ -530,7 +431,7 @@
       "20-05-2026"
     ],
     [
-      "48",
+      "39",
       "Dana Pengawalan Batu April 2026",
       "ITNE",
       "30000000",
@@ -541,7 +442,7 @@
       "13-05-2026"
     ],
     [
-      "49",
+      "40",
       "Dana Pengawalan Batu April 2026",
       "SFRE",
       "30000000",
@@ -552,7 +453,7 @@
       "13-05-2026"
     ],
     [
-      "50",
+      "41",
       "Pelunasan kontanan panen BLNE",
       "BLNE",
       "73743",
@@ -563,7 +464,7 @@
       "12-05-2026"
     ],
     [
-      "51",
+      "42",
       "Pelunasan kontanan panen BLNE",
       "BLNE",
       "89797",
@@ -574,7 +475,7 @@
       "12-05-2026"
     ],
     [
-      "52",
+      "43",
       "Pelunasan kontanan panen BLNE",
       "BLNE",
       "7674",
@@ -585,7 +486,7 @@
       "12-05-2026"
     ],
     [
-      "53",
+      "44",
       "Pelunasan kontanan panen BLNE",
       "BLNE",
       "170232",
@@ -596,7 +497,7 @@
       "12-05-2026"
     ],
     [
-      "54",
+      "45",
       "Pelunasan kontanan panen BLNE",
       "BLNE",
       "141860",
@@ -607,7 +508,7 @@
       "12-05-2026"
     ],
     [
-      "55",
+      "46",
       "Pelunasan kontanan panen BLNE",
       "BLNE",
       "35121",
@@ -618,7 +519,7 @@
       "12-05-2026"
     ],
     [
-      "56",
+      "47",
       "Pelunasan kontanan panen BLNE",
       "BLNE",
       "38470",
@@ -629,7 +530,7 @@
       "12-05-2026"
     ],
     [
-      "57",
+      "48",
       "Pelunasan kontanan panen BLNE",
       "BLNE",
       "11572",
@@ -640,7 +541,7 @@
       "12-05-2026"
     ],
     [
-      "58",
+      "49",
       "Pelunasan kontanan panen BLNE",
       "BLNE",
       "9333",
@@ -651,7 +552,7 @@
       "12-05-2026"
     ],
     [
-      "59",
+      "50",
       "Pelunasan kontanan panen BLNE",
       "BLNE",
       "14-10-2057",
@@ -662,7 +563,7 @@
       "12-05-2026"
     ],
     [
-      "60",
+      "51",
       "Pelunasan kontanan panen BLNE",
       "BLNE",
       "165000",
@@ -673,7 +574,7 @@
       "12-05-2026"
     ],
     [
-      "61",
+      "52",
       "Pelunasan kontanan panen BLNE",
       "BLNE",
       "156305",
@@ -684,7 +585,7 @@
       "12-05-2026"
     ],
     [
-      "62",
+      "53",
       "Pelunasan kontanan panen BLNE",
       "BLNE",
       "3000",
@@ -695,18 +596,7 @@
       "12-05-2026"
     ],
     [
-      "63",
-      "PB dana SFRM ke BLNE",
-      "",
-      "959739",
-      "=VLOOKUP($I644,'M Rekening'!$D:$F,2,0)",
-      "=VLOOKUP($I644,'M Rekening'!$D:$F,3,0)",
-      "=VLOOKUP(RIGHT($D644,4),'M Rekening'!$C$2:$D$17,2,0)",
-      "IFT24613557",
-      "12-05-2026"
-    ],
-    [
-      "64",
+      "54",
       "Billing BPJSTK Maret Apr 2026",
       "ITNE",
       "208379427",
@@ -717,7 +607,7 @@
       "12-05-2026"
     ],
     [
-      "65",
+      "55",
       "Billing BPJ Kesehatan Apr Mei 2026",
       "ITNE",
       "33863425",
@@ -728,7 +618,7 @@
       "12-05-2026"
     ],
     [
-      "66",
+      "56",
       "Dana Pengawalan Batu Mei 2026",
       "BBNE",
       "35000000",
@@ -739,7 +629,7 @@
       "22-06-2026"
     ],
     [
-      "67",
+      "57",
       "Dana Pengawalan Batu Mei 2026",
       "ITNE",
       "30000000",
@@ -750,7 +640,7 @@
       "17-06-2026"
     ],
     [
-      "68",
+      "58",
       "Dana Pengawalan Batu Mei 2026",
       "SFRE",
       "30000000",
@@ -761,7 +651,7 @@
       "17-06-2026"
     ],
     [
-      "69",
+      "59",
       "Pesangon kary BLNE an Paulino Martins",
       "SFRM",
       "26000000",
@@ -772,18 +662,18 @@
       "17-06-2026"
     ],
     [
-      "70",
+      "60",
       "Pesangon kary BLNE an Paulino Martins",
       "SFRM",
-      "=88034993-26000000",
-      "=VLOOKUP($I763,'M Rekening'!$D:$F,2,0)",
-      "=VLOOKUP($I763,'M Rekening'!$D:$F,3,0)",
+      "62034993",
+      "#N/A",
+      "#N/A",
       "",
       "",
       ""
     ],
     [
-      "71",
+      "61",
       "Sambungan PLN baru MDLE",
       "SFRM",
       "31234500",
@@ -794,7 +684,7 @@
       ""
     ],
     [
-      "72",
+      "62",
       "Pemb 50 Kg aspal cair atap kantor",
       "SFRM",
       "1438000",
@@ -805,7 +695,7 @@
       ""
     ],
     [
-      "73",
+      "63",
       "Dana Pengawalan Batu Juni 2026",
       "BBNE",
       "35000000",
@@ -816,7 +706,7 @@
       "16-07-2026"
     ],
     [
-      "74",
+      "64",
       "Dana Pengawalan Batu Juni 2026",
       "ITNE",
       "30000000",
@@ -827,7 +717,7 @@
       ""
     ],
     [
-      "75",
+      "65",
       "Dana Pengawalan Batu Juni 2026",
       "SFRE",
       "30000000",
@@ -838,7 +728,7 @@
       ""
     ],
     [
-      "76",
+      "66",
       "Pemb 40 Kg aspal cair waterproof atap kantor",
       "SFRM",
       "1488992",
@@ -849,7 +739,7 @@
       "03-07-2026"
     ],
     [
-      "77",
+      "67",
       "Klaim pembelian ATK P&L",
       "SFRM",
       "859679",
@@ -860,7 +750,7 @@
       ""
     ],
     [
-      "78",
+      "68",
       "Dana Expose kabupaten",
       "BBNE",
       "15500000",
@@ -871,7 +761,7 @@
       ""
     ],
     [
-      "79",
+      "69",
       "Dana Expose kabupaten",
       "BBNE",
       "15000000",
@@ -882,7 +772,7 @@
       ""
     ],
     [
-      "80",
+      "70",
       "Pemb 35 Kg aspal cair waterproof atap kantor",
       "SFRM",
       "1372193",
@@ -893,7 +783,7 @@
       "21-07-2026"
     ],
     [
-      "81",
+      "71",
       "Pemb 0,5 Kg semen elastis beton",
       "SFRM",
       "257671",
@@ -904,7 +794,7 @@
       "21-07-2026"
     ],
     [
-      "82",
+      "72",
       "Konsumsi mess tim IT",
       "SFRM",
       "640000",
@@ -915,7 +805,7 @@
       "24-07-2026"
     ],
     [
-      "83",
+      "73",
       "Konsumsi mess tim plasma mandiri",
       "SFRM",
       "450000",
@@ -926,7 +816,7 @@
       "24-07-2026"
     ],
     [
-      "84",
+      "74",
       "Perbaikan AC mess",
       "SFRM",
       "600000",
@@ -937,7 +827,7 @@
       "30-07-2026"
     ],
     [
-      "85",
+      "75",
       "Potongan gaji kary SFRE Aprl 2026",
       "SFRE",
       "750000",
@@ -948,7 +838,7 @@
       "30-07-2026"
     ],
     [
-      "86",
+      "76",
       "Gaji kary BLNE Juni 2026",
       "BLNE",
       "19538125",
@@ -959,18 +849,7 @@
       "30-07-2026"
     ],
     [
-      "87",
-      "PB dana SFRM ke BLNE",
-      "",
-      "19538125",
-      "=VLOOKUP($I1024,'M Rekening'!$D:$F,2,0)",
-      "=VLOOKUP($I1024,'M Rekening'!$D:$F,3,0)",
-      "=VLOOKUP(RIGHT($D1024,4),'M Rekening'!$C$2:$D$17,2,0)",
-      "IFT29835784",
-      "30-07-2026"
-    ],
-    [
-      "88",
+      "77",
       "Dana Pengawalan Batu Juli 2026",
       "BBNE",
       "35000000",
@@ -981,7 +860,7 @@
       "27-08-2026"
     ],
     [
-      "89",
+      "78",
       "Dana Pengawalan Batu Juli 2026",
       "ITNE",
       "30000000",
@@ -992,7 +871,7 @@
       "18-08-2026"
     ],
     [
-      "90",
+      "79",
       "Dana Pengawalan Batu Juli 2026",
       "SFRE",
       "30000000",
@@ -1003,7 +882,7 @@
       "18-08-2026"
     ],
     [
-      "91",
+      "80",
       "DP Konsumsi mess",
       "SFRM",
       "2100000",
@@ -1014,7 +893,7 @@
       ""
     ],
     [
-      "92",
+      "81",
       "Pemb 40 Kg aspal cair atap kantor",
       "SFRM",
       "1493993",
@@ -1025,7 +904,7 @@
       "14-08-2026"
     ],
     [
-      "93",
+      "82",
       "Dana Pengawalan Batu Agustus 2026",
       "BBNE",
       "35000000",
@@ -1036,7 +915,7 @@
       ""
     ],
     [
-      "94",
+      "83",
       "Dana Pengawalan Batu Agustus 2026",
       "ITNE",
       "30000000",
@@ -1047,7 +926,7 @@
       ""
     ],
     [
-      "95",
+      "84",
       "Dana Pengawalan Batu Agustus 2026",
       "SFRE",
       "30000000",
@@ -1058,7 +937,7 @@
       ""
     ],
     [
-      "96",
+      "85",
       "Setoran awal aktivasi rekening",
       "SFRM",
       "10000000",
@@ -1069,5 +948,5 @@
       "07-09-2026"
     ]
   ],
-  "total": 96
+  "total": 85
 }

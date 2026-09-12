@@ -172,27 +172,10 @@ def parse_sheet(sheet, m_rek_lookup):
         if str(ket).strip().lower() in ["direkap", "disetujui", "total"]:
             continue
         
-        # Check Kolom B (index 1) - formula IF that returns 0 or 1
-        # If col E (Kebun) = "KEBUN" → 0 (hidden)
-        # If col F (Nilai) = 0 or empty → 0 (hidden)
-        # Otherwise → 1 (visible)
-        col_e = row[4] if len(row) > 4 else None
-        col_f = row[5] if len(row) > 5 else None
-        
-        if col_e and str(col_e).strip().upper() == "KEBUN":
+        # Skip baris yang Kolom B-nya 0 atau kosong
+        col_b = row[1] if len(row) > 1 else None
+        if col_b is None or str(col_b).strip() in ["0", ""]:
             continue
-        
-        # Skip if Nilai is 0 or empty
-        if col_f is None or str(col_f).strip() in ["0", "", "None"]:
-            continue
-        
-        # Try to convert to number
-        try:
-            nilai = float(str(col_f).replace(",", "").replace(" ", ""))
-            if nilai == 0:
-                continue
-        except (ValueError, TypeError):
-            pass
         
         row_number += 1
         
@@ -240,7 +223,7 @@ def main():
         os.makedirs(output_dir)
     
     print(f"Reading {input_file}...")
-    wb = openpyxl.load_workbook(input_file, read_only=True)
+    wb = openpyxl.load_workbook(input_file, read_only=True, data_only=True)
     
     # Build M Rekening lookup
     m_rek_sheet = wb["M Rekening"]
