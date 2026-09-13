@@ -291,23 +291,59 @@ var mRekening = {};
 
 window.addEventListener("load", function() {
   loadSheetTabs();
+  
+  // Create debug status panel
+  var debugEl = document.createElement("div");
+  debugEl.id = "debugPanel";
+  debugEl.style.cssText = "position:fixed;bottom:0;left:0;right:0;background:#1e293b;border-top:1px solid #3b82f6;padding:0.75rem 1rem;font-size:0.8rem;color:#94a3b8;z-index:999;max-height:150px;overflow-y:auto;";
+  debugEl.innerHTML = "🔄 Initializing...";
+  document.body.appendChild(debugEl);
+  
+  function log(msg) {
+    var time = new Date().toLocaleTimeString();
+    debugEl.innerHTML += "<br>[" + time + "] " + msg;
+    debugEl.scrollTop = debugEl.scrollHeight;
+    console.log(msg);
+  }
+  
+  log("📋 Sheet tabs loaded");
+  
   // Load m-rekening first, then load first sheet
+  log("🏦 Loading m-rekening.json...");
   fetch("/api/sheet/m-rekening.json")
-    .then(function(r) { return r.json(); })
+    .then(function(r) {
+      if (!r.ok) throw new Error("HTTP " + r.status);
+      return r.json();
+    })
     .then(function(data) {
       mRekening = data;
+      log("✅ M Reketing loaded: " + Object.keys(data).length + " entries");
     })
-    .catch(function() {})
+    .catch(function(e) {
+      log("⚠️ M Rekening failed: " + e.message);
+    })
     .then(function() {
+      log("📊 Loading email-cdp.json...");
       fetch("/api/sheet/email-cdp.json")
-        .then(function(r) { return r.json(); })
+        .then(function(r) {
+          if (!r.ok) throw new Error("HTTP " + r.status);
+          return r.json();
+        })
         .then(function(data) {
           sheetData = { headers: data.headers, rows: data.rows };
           currentPage = 1;
           renderTable();
+          log("✅ Email CDP loaded: " + data.rows.length + " rows");
+          // Hide debug after 3 seconds
+          setTimeout(function() {
+            debugEl.style.transition = "opacity 0.5s";
+            debugEl.style.opacity = "0";
+            setTimeout(function() { debugEl.remove(); }, 500);
+          }, 3000);
         })
         .catch(function(e) {
-          document.getElementById("content").innerHTML = '<div class="loading">Error: ' + e.message + '</div>';
+          log("❌ Email CDP failed: " + e.message);
+          document.getElementById("content").innerHTML = '<div class="loading">Error loading data: ' + e.message + '</div>';
         });
     });
 });
@@ -329,14 +365,26 @@ function loadSheet(file) {
   loadSheetTabs();
   document.getElementById("content").innerHTML = '<div class="loading"><div class="spinner"></div><br>Loading...</div>';
   
+  // Show debug for sheet switch
+  var debugEl = document.getElementById("debugPanel");
+  if (debugEl) {
+    debugEl.style.display = "block";
+    debugEl.innerHTML = "🔄 Loading " + file + "...";
+  }
+  
   fetch('/api/sheet/' + file)
-    .then(function(r) { return r.json(); })
+    .then(function(r) {
+      if (!r.ok) throw new Error("HTTP " + r.status);
+      return r.json();
+    })
     .then(function(data) {
       sheetData = { headers: data.headers, rows: data.rows };
       currentPage = 1;
       renderTable();
+      if (debugEl) debugEl.innerHTML += "<br>✅ " + file + " loaded: " + data.rows.length + " rows";
     })
     .catch(function(e) {
+      if (debugEl) debugEl.innerHTML += "<br>❌ " + file + " failed: " + e.message;
       document.getElementById("content").innerHTML = '<div class="loading">Error: ' + e.message + '</div>';
     });
 }
