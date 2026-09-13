@@ -42,12 +42,98 @@ export default {
       }
     }
     
+    // Upload endpoint
+    if (path === '/api/upload' && request.method === 'POST') {
+      return handleUpload(request, env, corsHeaders);
+    }
+    
     // Default: serve HTML
     return new Response(HTML_PAGE, {
       headers: { 'Content-Type': 'text/html;charset=UTF-8' },
     });
   },
 };
+
+async function handleUpload(request, env, corsHeaders) {
+  try {
+    const contentType = request.headers.get('Content-Type') || '';
+    if (!contentType.includes('multipart/form-data')) {
+      return new Response(JSON.stringify({ error: 'Invalid content type' }), {
+        status: 400,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      });
+    }
+    
+    const formData = await request.formData();
+    const file = formData.get('file');
+    if (!file) {
+      return new Response(JSON.stringify({ error: 'No file provided' }), {
+        status: 400,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      });
+    }
+    
+    const fileName = file.name || '2026 - Rekap Input CAMS.xlsx';
+    const arrayBuffer = await file.arrayBuffer();
+    const uint8Array = new Uint8Array(arrayBuffer);
+    
+    // Convert to base64
+    let binary = '';
+    for (let i = 0; i < uint8Array.length; i++) {
+      binary += String.fromCharCode(uint8Array[i]);
+    }
+    const base64Content = btoa(binary);
+    
+    // Get current file SHA (needed for update)
+    const repoUrl = 'https://api.github.com/repos/Jiganyusi/PRETASE/contents/' + encodeURIComponent(fileName);
+    const getResp = await fetch(repoUrl, {
+      headers: { 'Authorization': 'token ' + env.GITHUB_TOKEN, 'Accept': 'application/vnd.github.v3+json' },
+    });
+    let sha = null;
+    if (getResp.ok) {
+      const data = await getResp.json();
+      sha = data.sha;
+    }
+    
+    // Upload to GitHub
+    const uploadBody = {
+      message: 'Update ' + fileName + ' via web upload',
+      content: base64Content,
+    };
+    if (sha) uploadBody.sha = sha;
+    
+    const uploadResp = await fetch(repoUrl, {
+      method: 'PUT',
+      headers: {
+        'Authorization': 'token ' + env.GITHUB_TOKEN,
+        'Content-Type': 'application/json',
+        'Accept': 'application/vnd.github.v3+json',
+      },
+      body: JSON.stringify(uploadBody),
+    });
+    
+    if (!uploadResp.ok) {
+      const err = await uploadResp.text();
+      return new Response(JSON.stringify({ error: 'GitHub upload failed: ' + err }), {
+        status: 500,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      });
+    }
+    
+    return new Response(JSON.stringify({
+      success: true,
+      message: 'File berhasil di-upload ke GitHub',
+    }), {
+      headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+    });
+    
+  } catch (err) {
+    return new Response(JSON.stringify({ error: err.message }), {
+      status: 500,
+      headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+    });
+  }
+}
 
 const HTML_PAGE = `<!DOCTYPE html>
 <html lang="id">
@@ -62,6 +148,12 @@ body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-
 .header { background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%); border-bottom: 1px solid #334155; padding: 1rem 2rem; position: sticky; top: 0; z-index: 100; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; }
 .header h1 { font-size: 1.5rem; color: #f8fafc; font-weight: 700; }
 .header p { font-size: 0.85rem; color: #94a3b8; margin-top: 0.25rem; }
+.header-actions { display: flex; gap: 0.5rem; align-items: center; }
+.btn-header { padding: 0.5rem 1rem; border: none; border-radius: 0.5rem; cursor: pointer; font-size: 0.85rem; font-weight: 600; transition: all 0.2s; }
+.btn-upload { background: #7c3aed; color: #fff; }
+.btn-upload:hover { background: #6d28d9; }
+.btn-download { background: #059669; color: #fff; }
+.btn-download:hover { background: #047857; }
 .container { width: 100%; margin: 0; padding: 1rem; }
 .sheet-tabs { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 1rem; }
 .tab { padding: 0.5rem 1rem; background: #1e293b; border: 1px solid #334155; border-radius: 0.5rem; cursor: pointer; font-size: 0.85rem; color: #94a3b8; transition: all 0.2s; white-space: nowrap; }
@@ -136,6 +228,11 @@ tr:nth-child(even) td { background: #0f172a; }
   <div>
     <h1>📊 Pembayaran Region</h1>
     <p>Data Rekap Pembayaran</p>
+  </div>
+  <div class="header-actions">
+    <input type="file" id="uploadInput" accept=".xlsx,.xls" style="display: none;" onchange="handleUpload(this)">
+    <button class="btn-header btn-upload" onclick="document.getElementById('uploadInput').click()">📤 Upload</button>
+    <button class="btn-header btn-download" onclick="downloadAllData()">⬇ Download</button>
   </div>
 </div>
 <div class="container">
@@ -428,6 +525,76 @@ function downloadImage() {
     link.href = canvas.toDataURL("image/jpeg", 0.9);
     link.click();
   });
+}
+
+function handleUpload(input) {
+  var file = input.files[0];
+  if (!file) return;
+  
+  // Show loading
+  var statusEl = document.createElement("div");
+  statusEl.id = "uploadStatus";
+  statusEl.style.cssText = "position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:#1e293b;border:1px solid #3b82f6;border-radius:0.75rem;padding:2rem;z-index:2000;text-align:center;";
+  statusEl.innerHTML = '<div class="spinner" style="width:40px;height:40px;border:3px solid #334155;border-top-color:#3b82f6;border-radius:50%;animation:spin 1s linear infinite;margin:0 auto 1rem;"></div><p style="color:#e2e8f0">Uploading...</p>';
+  document.body.appendChild(statusEl);
+  
+  var formData = new FormData();
+  formData.append("file", file);
+  
+  fetch("/api/upload", {
+    method: "POST",
+    body: formData,
+  })
+  .then(function(r) { return r.json(); })
+  .then(function(data) {
+    if (data.success) {
+      statusEl.innerHTML = '<p style="color:#34d399">✅ ' + data.message + '</p><p style="color:#94a3b8;font-size:0.85rem;margin-top:0.5rem">JSON cache perlu di-regenerate secara manual via script Python</p>';
+      setTimeout(function() {
+        statusEl.remove();
+        location.reload();
+      }, 3000);
+    } else {
+      statusEl.innerHTML = '<p style="color:#f87171">❌ ' + (data.error || "Upload gagal") + '</p>';
+      setTimeout(function() { statusEl.remove(); }, 3000);
+    }
+  })
+  .catch(function(err) {
+    statusEl.innerHTML = '<p style="color:#f87171">❌ ' + err.message + '</p>';
+    setTimeout(function() { statusEl.remove(); }, 3000);
+  });
+  
+  input.value = '';
+}
+
+function downloadAllData() {
+  if (!sheetData.rows || sheetData.rows.length === 0) {
+    alert("❌ Data belum tersedia");
+    return;
+  }
+  
+  // Build CSV content
+  var csv = [];
+  
+  // Headers
+  csv.push(sheetData.headers.join(","));
+  
+  // Rows
+  sheetData.rows.forEach(function(row) {
+    var cells = row.map(function(val) {
+      var s = String(val || "");
+      if (s.indexOf(",") >= 0 || s.indexOf('"') >= 0) {
+        s = '"' + s.replace(/"/g, '""') + '"';
+      }
+      return s;
+    });
+    csv.push(cells.join(","));
+  });
+  
+  var blob = new Blob([csv.join("\n")], { type: "text/csv;charset=utf-8;" });
+  var link = document.createElement("a");
+  link.download = "Pembayaran_Region_" + (currentSheet || "Sheet1") + "_" + new Date().toISOString().slice(0, 10) + ".csv";
+  link.href = URL.createObjectURL(blob);
+  link.click();
 }
 
 function toggleShare() {
