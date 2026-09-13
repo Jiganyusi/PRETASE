@@ -282,23 +282,33 @@ var SHEETS = [
 ];
 
 var currentSheet = null;
-var sheetData = { headers: [], rows: [], m_rekening: {} };
+var sheetData = { headers: [], rows: [] };
 var sortCol = 0;  // No urut column
 var sortAsc = false;  // Descending (terbaru di atas)
 var currentPage = 1;
 var rowsPerPage = 15;
+var mRekening = {};
 
 window.addEventListener("load", function() {
   loadSheetTabs();
-  fetch("/api/sheet/email-cdp.json")
+  // Load m-rekening first, then load first sheet
+  fetch("/api/sheet/m-rekening.json")
     .then(function(r) { return r.json(); })
     .then(function(data) {
-      sheetData = { headers: data.headers, rows: data.rows, m_rekening: data.m_rekening || {} };
-      currentPage = 1;
-      renderTable();
+      mRekening = data;
     })
-    .catch(function(e) {
-      document.getElementById("content").innerHTML = '<div class="loading">Error: ' + e.message + '</div>';
+    .catch(function() {})
+    .then(function() {
+      fetch("/api/sheet/email-cdp.json")
+        .then(function(r) { return r.json(); })
+        .then(function(data) {
+          sheetData = { headers: data.headers, rows: data.rows };
+          currentPage = 1;
+          renderTable();
+        })
+        .catch(function(e) {
+          document.getElementById("content").innerHTML = '<div class="loading">Error: ' + e.message + '</div>';
+        });
     });
 });
 
@@ -322,7 +332,7 @@ function loadSheet(file) {
   fetch('/api/sheet/' + file)
     .then(function(r) { return r.json(); })
     .then(function(data) {
-      sheetData = { headers: data.headers, rows: data.rows, m_rekening: data.m_rekening || {} };
+      sheetData = { headers: data.headers, rows: data.rows };
       currentPage = 1;
       renderTable();
     })
@@ -454,7 +464,7 @@ function showSlip(btn) {
   var remarks = row[1] || "-";
   
   // Get sender info from M Rekening
-  var sender = sheetData.m_rekening[kebun] || { nama: kebun, no_rek: "-", bank: "-" };
+  var sender = mRekening[kebun] || { nama: kebun, no_rek: "-", bank: "-" };
   var senderNama = sender.nama || kebun;
   var senderNoRek = sender.no_rek || "-";
   var senderBank = sender.bank || "-";

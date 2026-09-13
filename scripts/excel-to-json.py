@@ -89,8 +89,8 @@ def parse_sheet(sheet, m_rek_lookup):
         if not row or len(row) < 5:
             continue
         
-        # Check for REKAP PEMBAYARAN - block start
-        if row[0] and "REKAP PEMBAYARAN" in str(row[0]):
+        # Check for REKAP PEMBERIAN - block start
+        if row[0] and "REKAP PEMBERIAN" in str(row[0]):
             current_date = None
             continue
         
@@ -177,6 +177,12 @@ def main():
     m_rek_lookup = build_m_rekening_lookup(m_rek_sheet)
     print(f"M Rekening lookup: {len(m_rek_lookup)} entries")
     
+    # Save M Rekening to separate file
+    m_rek_path = os.path.join(output_dir, "m-rekening.json")
+    with open(m_rek_path, 'w', encoding='utf-8') as f:
+        json.dump(m_rek_lookup, f, ensure_ascii=False, separators=(',', ':'))
+    print(f"Saved M Rekening to {m_rek_path}")
+    
     # Map sheet names (case-insensitive)
     sheet_map = {}
     for name in wb.sheetnames:
@@ -210,14 +216,13 @@ def main():
         output = {
             "sheet": actual_name,
             "headers": headers,
-            "m_rekening": m_rek_lookup,
             "rows": rows,
             "total": len(rows)
         }
         
         output_path = os.path.join(output_dir, output_file)
         with open(output_path, 'w', encoding='utf-8') as f:
-            json.dump(output, f, ensure_ascii=False, indent=2)
+            json.dump(output, f, ensure_ascii=False, separators=(',', ':'))
         
         print(f"    Saved {len(rows)} rows to {output_path}")
     
