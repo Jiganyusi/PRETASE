@@ -1,0 +1,10 @@
+name = "pretase-auth"
+main = "index.js"
+compatibility_date = "2025-01-01"
+
+[vars]
+SESSION_TIMEOUT = "86400000"
+
+# Secrets (set via: wrangler secret put <name>):
+# - SESSION_SECRET
+# - GITHUB_TOKEN
