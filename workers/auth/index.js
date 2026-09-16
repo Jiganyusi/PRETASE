@@ -1,7 +1,8 @@
 // PRETASE Worker 1 - Auth & Upload
 // Secrets: SESSION_SECRET, GITHUB_TOKEN (via wrangler secret)
 
-const SESSION_TIMEOUT = parseInt(env.SESSION_TIMEOUT || '86400000');
+const env = globalThis;
+const SESSION_TIMEOUT = parseInt(SESSION_TIMEOUT || '86400000');
 
 function generateToken() {
   const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
@@ -93,7 +94,7 @@ async function handleUpload(request, env) {
 
     // Check if file exists
     const checkRes = await fetch(apiUrl, {
-      headers: { Authorization: `token ${env.GITHUB_TOKEN}` },
+      headers: { Authorization: `token ${GITHUB_TOKEN}` },
     });
     let sha = null;
     if (checkRes.ok) {
