@@ -1,0 +1,7 @@
+name = "pretase-viewer"
+main = "index.js"
+compatibility_date = "2025-01-01"
+
+[vars]
+AUTH_WORKER_URL = "https://pretase-auth.rizkyer32013.workers.dev"
+DATA_WORKER_URL = "https://pretase-data.rizkyer32013.workers.dev"
