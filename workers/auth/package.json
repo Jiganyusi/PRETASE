@@ -1,7 +1,0 @@
-{
-  "name": "pretase-auth",
-  "version": "1.0.0",
-  "description": "PRETASE Worker 1 - Authentication & Upload",
-  "main": "index.js",
-  "license": "MIT"
-}
