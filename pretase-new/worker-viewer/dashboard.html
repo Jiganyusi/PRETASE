@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html><head><meta charset="UTF-8"><title>PRETASE</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#0f172a;color:#e2e8f0;font-family:sans-serif;min-height:100vh}
+.header{background:linear-gradient(135deg,#1e293b,#0f172a);border-bottom:1px solid #334155;padding:1rem 2rem;display:flex;justify-content:space-between;align-items:center}
+.header h1{color:#fbbf24;font-size:1.5rem}
+.user-info{display:flex;align-items:center;gap:1rem}
+.user-info span{color:#94a3b8}
+.btn{padding:0.5rem 1rem;border-radius:0.5rem;border:none;cursor:pointer;font-size:0.85rem}
+.btn-r{background:#dc2626;color:#fff}
+.btn-b{background:#334155;color:#e2e8f0}
+.btn-d{background:#059669;color:#fff}
+.btn-v{background:#3b82f6;color:#fff}
+.container{padding:2rem;max-width:1200px;margin:0 auto}
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:1rem}
+.card{background:#1e293b;border:1px solid #334155;border-radius:0.75rem;padding:1.25rem;cursor:pointer;transition:border-color 0.2s}
+.card:hover{border-color:#3b82f6}
+.card h3{color:#fbbf24;margin-bottom:0.5rem;font-size:1rem}
+.card p{color:#94a3b8;font-size:0.8rem}
+</style></head>
+<body>
+<div class="header"><h1>PRETASE</h1><div class="user-info"><span id="user-info"></span><button class="btn btn-r" onclick="logout()">Logout</button></div></div>
+<div class="container"><h2 style="color:#fbbf24;margin-bottom:1rem;border-bottom:1px solid #334155;padding-bottom:0.5rem">Daftar Sheet</h2><div class="cards" id="cards"></div></div>
+<script>
+var CARDS=[{name:'Email CDP',file:'email_cdp.json'},{name:'Rekrut',file:'rekrut.json'},{name:'BAPP',file:'bapp.json'},{name:'COLA',file:'cola.json'},{name:'CS',file:'cs.json'},{name:'Kontanan',file:'kontanan.json'},{name:'Perdin RO',file:'perdin_ro.json'},{name:'Lain-Lain',file:'lain-lain.json'}];
+function esc(s){var d=document.createElement('div');d.textContent=s==null?'':String(s);return d.innerHTML}
+document.getElementById('user-info').textContent=window.__USER__+' ('+window.__ROLE__+')';
+document.getElementById('cards').innerHTML=CARDS.map(function(c){return '<div class="card" onclick="location.href=\'/sheet/?f='+encodeURIComponent(c.file)+'\'"><h3>'+esc(c.name)+'</h3><p>Klik untuk lihat data</p></div>'}).join('');
+async function logout(){await fetch('/api/logout');location.href='/login'}
+</script>
+</body></html>
